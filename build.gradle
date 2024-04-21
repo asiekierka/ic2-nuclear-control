@@ -1,0 +1,52 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { url "https://maven.fabricmc.net" }
+		maven { url "https://repo.sleeping.town" }
+	}
+	dependencies {
+		classpath "agency.highlysuspect:voldeloom:2.4" 
+	}
+}
+
+apply plugin: "agency.highlysuspect.voldeloom"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(11) //Last version able to set a --release as low as 6
+compileJava.options.release.set(6) //Forge doesn't understand classes compiled to versions of the class-file format newer than Java 6's
+
+String minecraftVersion = "1.4.7"
+String forgeVersion = "1.4.7-6.6.2.534"
+
+archivesBaseName = "IC2NuclearControl"
+version = "1.4.7"
+
+repositories {
+	ivy {
+		name 'asie dependency mirror'
+		artifactPattern "https://asie.pl/javadeps/[module]-[revision](-[classifier]).[ext]"
+		metadataSources {
+			artifact()
+		}
+	}
+}
+
+sourceSets {
+	main {
+		java.srcDirs = ["src/main/java"]
+		resources.srcDirs = ["src/main/resources", "docs"]
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraftVersion}"
+	forge "net.minecraftforge:forge:${forgeVersion}:universal@zip"
+	mappings "net.minecraftforge:forge:${forgeVersion}:src@zip"
+
+	modImplementation name: "buildcraft", version: "A-1.4.7-3.4.5", ext: "jar"
+	modImplementation name: "industrialcraft-2", version: "1.115.231-lf", ext: "jar"
+	modCompileOnly name: "gregtechmod", version: "290i", ext: "zip"
+}
+
+volde {
+	//more configuration goes here...
+}
